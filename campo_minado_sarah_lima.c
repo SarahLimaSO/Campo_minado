@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 //Escolhe nivel do jogo
-void gameLevel(int *lin, int *col){
+void gameLevel(int *lin, int *col, int* plays){
     char level[8];
+    int plays;
 
     while(1){
         scanf("%s", level);
@@ -12,17 +14,22 @@ void gameLevel(int *lin, int *col){
         if((strcmp(level,"facil")) == 0){
             *lin = 10;
             *col = 10;
-           // printf("deu certo");
+            plays = (*lin * (*col))-1;
+            printf("deu certo %d\n", plays);
             break;
         }
         else if((strcmp(level,"medio")) == 0){
             *lin = 20;
             *col = 20;
+            plays = (*lin * (*col))-1;
+            printf("deu certo %d\n", plays);
             break;
         }
         else if((strcmp(level,"dificil")) == 0){
             *lin = 30;
             *col = 30;
+            plays = (*lin * (*col))-1;
+            printf("deu certo %d\n", plays);
             break;
         }
         else{
@@ -52,6 +59,7 @@ char** newMatrix(int lin, int col){
 
 //Initializing the matrix mat
 char** initializeMat(char** mat, int nLin, int nCol){
+    srand(time(NULL));
 
     for(int line = 0; line < nLin; line++){
         for(int column = 0; column < nCol; column++){
@@ -60,19 +68,27 @@ char** initializeMat(char** mat, int nLin, int nCol){
     }
     return mat;
 } 
-void printMatrix(char** mat, int nLin, int nCol){
+//Priting the matrix
+void printMatrix(char** mat, int nLin, int nCol, int coordX, int coordY){
+    
     for(int line = 0; line < nLin; line++){
         for(int column = 0; column < nCol; column++){
-            printf("%c",mat[line][column]);
+            if((x != line)&&(y != column)){
+                
+                printf("%c",mat[line][column]);
+            }
+            else{
+
+            }
         }
         putchar('\n');
     }
-}
+}  
 int main() {
-    int lin;
-    int col;
+    int lin, col, coordX, coordY, plays;
 
-    gameLevel(&lin, &col);
+//Choosing the game level
+    gameLevel(&lin, &col, &plays);
     char ** mat = newMatrix(lin,col);
    
     
@@ -80,7 +96,8 @@ int main() {
     initializeMat(mat, lin, col);
 
 //Printing the matrix
-    printMatrix(mat, lin, col);
+    printMatrix(mat, lin, col, coordX, coordY);
 
+    free(mat);
     return 0;
 }
