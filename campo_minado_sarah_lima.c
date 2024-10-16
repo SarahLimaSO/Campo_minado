@@ -4,9 +4,8 @@
 #include <time.h>
 
 //Escolhe nivel do jogo
-void gameLevel(int *lin, int *col, int* plays){
+void gameLevel(int *lin, int *col, int *plays, int *nMines ){
     char level[8];
-    int plays;
 
     while(1){
         scanf("%s", level);
@@ -14,22 +13,25 @@ void gameLevel(int *lin, int *col, int* plays){
         if((strcmp(level,"facil")) == 0){
             *lin = 10;
             *col = 10;
-            plays = (*lin * (*col))-1;
-            printf("deu certo %d\n", plays);
+            *nMines = 3;
+            *plays = (*lin * (*col)) - (*nMines+1);
+            printf("deu certo facil%d\n", *plays);
             break;
         }
         else if((strcmp(level,"medio")) == 0){
             *lin = 20;
             *col = 20;
-            plays = (*lin * (*col))-1;
-            printf("deu certo %d\n", plays);
+            *nMines = 6;
+            *plays = (*lin * (*col)) - (*nMines+1);
+            printf("deu certo medio%d\n", *plays);
             break;
         }
         else if((strcmp(level,"dificil")) == 0){
             *lin = 30;
             *col = 30;
-            plays = (*lin * (*col))-1;
-            printf("deu certo %d\n", plays);
+            *nMines = 9;
+            *plays = (*lin * (*col)) - (*nMines+1);
+            printf("deu certo dificil%d\n", *plays);
             break;
         }
         else{
@@ -56,10 +58,46 @@ char** newMatrix(int lin, int col){
     }
     return mat;
 }
+//Creating a matrix that is initializated with the coordinate of the mines
+int** createMines(int nLin, int nMines){
+    int coord, prevCoord;
+    int **mines = malloc(2*sizeof(int));
 
+    if(mines == NULL){
+        printf("ERROR03! Insufficient memory!");
+        exit(1);
+    }
+
+    for(int ind = 0; ind < 2; ind++){
+        mines[ind] = malloc(nMines*sizeof(int));
+
+        if(mines == NULL){
+            printf("ERROR04! Insufficient memory!");
+            exit(1);
+        }
+    }
+    //Inicializating the seed with time
+    srand(time(NULL));
+
+    for(int lin = 0; lin < 2; lin++){
+        for(int col = 0; col < nMines; col++){
+
+            //The coord will be a number beetween 1 and the number of lines(because the number of lines is equal to the number of columns)
+            coord = 1+ rand() %((nLin)+1);;
+
+            if(coord != prevCoord){
+                mines[lin][col] = coord;
+                printf("coord %d\n", mines[lin][col]);
+                prevCoord = coord;
+            }
+        }
+        prevCoord = 0;
+    }
+
+    return mines;
+}
 //Initializing the matrix mat
 char** initializeMat(char** mat, int nLin, int nCol){
-    srand(time(NULL));
 
     for(int line = 0; line < nLin; line++){
         for(int column = 0; column < nCol; column++){
@@ -73,22 +111,22 @@ void printMatrix(char** mat, int nLin, int nCol, int coordX, int coordY){
     
     for(int line = 0; line < nLin; line++){
         for(int column = 0; column < nCol; column++){
-            if((x != line)&&(y != column)){
-                
-                printf("%c",mat[line][column]);
-            }
-            else{
+            //if((x != line)&&(y != column)){
 
-            }
+                printf("%c",mat[line][column]);
+           // }
+            //else{
+
+            //}
         }
         putchar('\n');
     }
 }  
 int main() {
-    int lin, col, coordX, coordY, plays;
+    int lin, col, coordX, coordY, plays, nMines;
 
 //Choosing the game level
-    gameLevel(&lin, &col, &plays);
+    gameLevel(&lin, &col, &plays, &nMines);
     char ** mat = newMatrix(lin,col);
    
     
@@ -97,6 +135,7 @@ int main() {
 
 //Printing the matrix
     printMatrix(mat, lin, col, coordX, coordY);
+    createMines(lin, nMines);
 
     free(mat);
     return 0;
