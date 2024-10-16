@@ -1,7 +1,14 @@
 #include <stdio.h>
 
+//Criando nova matriz
 int newMatrix(int lin, int col){
-    char mat = calloc(lin*sizeof(char));
+    char **mat = calloc(lin*sizeof(char*));
+
+    for(int ind = 0; ind < lin; ind++){
+        mat[ind](char*)= calloc(n*sizeof(char));
+    }
+    
+    return mat;
 }
 int main() {
    char level[7];
