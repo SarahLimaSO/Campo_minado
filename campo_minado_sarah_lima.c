@@ -1,33 +1,43 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //Criando nova matriz
-int newMatrix(int lin, int col){
-    char **mat = calloc(lin*sizeof(char*));
+char** newMatrix(int lin, int col){
+    char **mat = calloc(lin,sizeof(char*));
 
     for(int ind = 0; ind < lin; ind++){
-        mat[ind](char*)= calloc(n*sizeof(char));
+        mat[ind] = (char*) calloc(col,sizeof(char));
     }
     
     return mat;
 }
-int main() {
-   char level[7];
 
-   scanf("%s", level);
+//Inicializando matriz
+char** initializeMat(char** mat){
 
-   switch(level){
-        case "facil":
-            newMatrix(10,10);
-        break;
+    return mat;
+} 
+//Escolhe nivel do jogo
+void gameLevel(){
+    char level[8];
+    scanf("%s", level);
 
-        case "medio":
-            newMatrix(20,20);
-        break;
-
-        case "dificil":
-            newMatrix(30,30);
-        break;
-
+    if((strcmp(level),"facil") == 0){
+        newMatrix(10,10);
     }
+    else if((strcmp(level),"medio") = 0){
+        newMatrix(20,20);
+    }
+    else if((strcmp(level),"dificil") = 0){
+        newMatrix(30,30);
+    }
+    else{
+        printf("Level not found =( \n Please, enter a valid level!!!")
+    }
+}
+int main() {
+   
+
     return 0;
 }
