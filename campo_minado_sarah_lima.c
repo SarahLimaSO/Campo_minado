@@ -23,17 +23,17 @@ void gameLevel(){
     char level[8];
     scanf("%s", level);
 
-    if((strcmp(level),"facil") == 0){
+    if((strcmp(level,"facil")) == 0){
         newMatrix(10,10);
     }
-    else if((strcmp(level),"medio") = 0){
+    else if((strcmp(level,"medio")) == 0){
         newMatrix(20,20);
     }
-    else if((strcmp(level),"dificil") = 0){
+    else if((strcmp(level,"dificil")) == 0){
         newMatrix(30,30);
     }
     else{
-        printf("Level not found =( \n Please, enter a valid level!!!")
+        printf("Level not found =( \n Please, enter a valid level!!!");
     }
 }
 int main() {
