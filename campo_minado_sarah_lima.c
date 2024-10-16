@@ -83,13 +83,13 @@ int** createMines(int nLin, int nMines){
         for(int col = 0; col < nMines; col++){
 
             //The coord will be a number beetween 1 and the number of lines(because the number of lines is equal to the number of columns)
-            coord = 1+ rand() %((nLin)+1);;
+            coord = 1+ rand() %((nLin)+1);
 
-            if(coord != prevCoord){
+           // if(coord != prevCoord){
                 mines[lin][col] = coord;
                 printf("coord %d\n", mines[lin][col]);
                 prevCoord = coord;
-            }
+           // }
         }
         prevCoord = 0;
     }
@@ -111,13 +111,13 @@ void printMatrix(char** mat, int nLin, int nCol, int coordX, int coordY){
     
     for(int line = 0; line < nLin; line++){
         for(int column = 0; column < nCol; column++){
-            //if((x != line)&&(y != column)){
-
+            if((coordX == line)&&(coordY == column)){
+                printf("%c", '@');
+            }
+            else{
                 printf("%c",mat[line][column]);
-           // }
-            //else{
-
-            //}
+                
+            }
         }
         putchar('\n');
     }
@@ -134,7 +134,13 @@ int main() {
     initializeMat(mat, lin, col);
 
 //Printing the matrix
-    printMatrix(mat, lin, col, coordX, coordY);
+    
+    for(int cont = 0; cont < plays; cont++){
+        printMatrix(mat, lin, col, coordX, coordY);
+        printf("Digite uma coordenada(x,y) entre 0 e %d:\n", lin);
+        scanf("%d,%d", &coordX, &coordY);
+    }
+
     createMines(lin, nMines);
 
     free(mat);
