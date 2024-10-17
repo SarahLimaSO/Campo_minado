@@ -96,7 +96,8 @@ int* createMines(int nLin, int nCol, int nMines){
             cont++;
         }
     }
-    //teste minas
+
+    
     for(int i = 0; i < nLin; i++){
         for(int j = 0; j < nCol; j++){
             printf("%d ",mines[i*nCol+j]);  
@@ -105,9 +106,6 @@ int* createMines(int nLin, int nCol, int nMines){
     }
     putchar('\n');
     putchar('\n');
-    putchar('\n');
-
-
     return mines;
 }
 //Modifies the matrix mat according wih the coordinates that were chosen by the player
@@ -136,24 +134,31 @@ void printMatrix(char** mat, int nLin, int nCol){
 }
 //Calculates the number of mines within a distance of at least one 
 int minesProx(int* mines, int nLin, int nCol, int coordX, int coordY){
-    int dist, qntdMines;
+    int qntdMines;
     qntdMines = 0;
 
     for(int i = 0; i < nLin; i++){
         for(int j = 0; j < nCol; j++){
+            int dist = 0;
 
             dist = sqrt(pow((i-coordX), 2) + pow((j-coordY),2));
-
             if((mines[i*nCol+j] == -1)&&(dist <= 1)){
                 qntdMines++;
-            }
-            else{
-                mines[i*nCol+j] = dist;
-            }  
+            } 
         }
     }
     //printf("MINES PROX: %d\n", qntdMines);
     return qntdMines;
+}
+void printTemplate(int *mines, int nLin, int nCol){
+    for(int i = 0; i < nLin; i++){
+        for(int j = 0; j < nCol; j++){
+            printf("%d ",mines[i*nCol+j]);  
+        }
+        putchar('\n');
+    }
+    putchar('\n');
+    putchar('\n');
 } 
 //If the player hits a mine, it prints game over. But if the number of moves runs out and he hasn't hit a mine, he wins.
 int gameOver(int* mines, int plays, int coordX, int coordY, int nCol){
@@ -185,16 +190,21 @@ int main() {
 
         scanf("%d,%d", &coordX, &coordY);
 
-        //
+        //Subtract minus 1 from the value of the coordinates
         coordX -= 1;
         coordY -= 1;
         qntdMines = minesProx(mines, lin, col, coordX, coordY);
+
+        //Modifies the matrix mat according wih the coordinates that were chosen by the player
         modifyMat(mat, lin, col, coordX, coordY, qntdMines);
 
         //If the funcion game over return 1, the player lost, and the loop stops 
         int gameStatus = gameOver(mines, plays, coordX, coordY,col);
         if(gameStatus){
             printf("game over =(\n");
+
+            //Print the matrix template
+            printTemplate(mines,lin,col);
             break;
         }
         cont++;
