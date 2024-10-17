@@ -16,7 +16,7 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
             *col = 10;
             *nMines = 3;
             *plays = (*lin * (*col)) - (*nMines+1);
-            printf("deu certo facil%d\n", *plays);
+           // printf("deu certo facil%d\n", *plays);
             break;
         }
         else if((strcmp(level,"medio")) == 0){
@@ -82,7 +82,8 @@ int* createMines(int nLin, int nCol, int nMines){
 
         //The valor of "coord" will be a number beetween 0 and the number of lines(because the number of lines is equal to the number of columns)
         for(int indV = 0; indV < 2; indV++){ 
-            randNum = 1+ rand() %((nLin));
+            randNum = rand() %((nLin - 1));
+            // printf("%d\n", randNum);
             coord[indV] = randNum;
         }
         line = coord[0];
@@ -98,7 +99,7 @@ int* createMines(int nLin, int nCol, int nMines){
     //teste minas
     for(int i = 0; i < nLin; i++){
         for(int j = 0; j < nCol; j++){
-            printf("%d",mines[i*nCol+j]);  
+            printf("%d ",mines[i*nCol+j]);  
         }
         putchar('\n');
     }
@@ -128,7 +129,7 @@ void printMatrix(char** mat, int nLin, int nCol){
     
     for(int line = 0; line < nLin; line++){
         for(int column = 0; column < nCol; column++){
-            printf("%c",mat[line][column]);  
+            printf("%c ",mat[line][column]);  
         }
         putchar('\n');
     }
@@ -189,8 +190,8 @@ int main() {
         //
         coordX -= 1;
         coordY -= 1;
-        qntdMines = minesProx(mines, lin, col, (coordX-1), (coordY-1));
-        modifyMat(mat, lin, col, (coordX-1), (coordY-1), qntdMines);
+        qntdMines = minesProx(mines, lin, col, coordX, coordY);
+        modifyMat(mat, lin, col, coordX, coordY, qntdMines);
 
         //If the funcion game over return 1, the player lost, and the loop stops 
         int gameStatus = gameOver(mines, plays, coordX, coordY,col);
