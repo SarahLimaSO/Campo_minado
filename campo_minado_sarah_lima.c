@@ -141,23 +141,23 @@ int minesProx(int* mines, int nLin, int nCol, int coordX, int coordY){
 
     for(int i = 0; i < nLin; i++){
         for(int j = 0; j < nCol; j++){
-            if(mines[i*nCol+j] == -1){
 
-                dist = sqrt(pow((i-coordX), 2) + pow((j-coordY),2));
+            dist = sqrt(pow((i-coordX), 2) + pow((j-coordY),2));
 
-                if(dist <= 1){
-                    qntdMines++;
-                }
+            if((mines[i*nCol+j] == -1)&&(dist <= 1)){
+                qntdMines++;
+            }
+            else{
+                mines[i*nCol+j] = dist;
             }  
         }
     }
-    printf("MINES PROX: %d\n", qntdMines);
+    //printf("MINES PROX: %d\n", qntdMines);
     return qntdMines;
 } 
 //If the player hits a mine, it prints game over. But if the number of moves runs out and he hasn't hit a mine, he wins.
 int gameOver(int* mines, int plays, int coordX, int coordY, int nCol){
     if(mines[coordX*nCol+coordY] == -1){
-        printf("Entrou\n");
         return 1;
     }
     return 0;
@@ -176,8 +176,6 @@ int main() {
     int* mines = createMines(lin,col,nMines);
 
 //
-    
-    
     while(cont < plays){
         int qntdMines = 0;
 
