@@ -110,12 +110,14 @@ int* createMines(int nLin, int nCol, int nMines){
     return mines;
 }
 //Modifies the matrix mat according wih the coordinates that were chosen by the player
-char** modifyMat(char** mat, int nLin, int nCol, int coordX, int coordY){
+char** modifyMat(char** mat, int nLin, int nCol, int coordX, int coordY, int minesProx){
+    //Converts the int minesProx to the correspondent char
+    char converted = '0' + minesProx;
 
     for(int line = 0; line < nLin; line++){
         for(int column = 0; column < nCol; column++){
             if((coordX == line)&&(coordY == column)){
-                mat[line][column] = '@';
+                mat[line][column] = converted;
             }
         }
     }
@@ -131,6 +133,7 @@ void printMatrix(char** mat, int nLin, int nCol){
         putchar('\n');
     }
 }
+//Calculates the number of mines within a distance of at least one 
 int minesProx(int* mines, int nLin, int nCol, int coordX, int coordY){
     int dist, qntdMines;
     qntdMines = 0;
@@ -147,7 +150,7 @@ int minesProx(int* mines, int nLin, int nCol, int coordX, int coordY){
             }  
         }
     }
-    printf("DIST: %d\n", qntdMines);
+    printf("MINES PROX: %d\n", qntdMines);
     return qntdMines;
 }  
 int main() {
@@ -166,11 +169,15 @@ int main() {
 //Printing the matrix
     
     for(int cont = 0; cont < plays; cont++){
+        int qntdMines = 0;
+
         printMatrix(mat, lin, col);
         printf("Digite uma coordenada(x,y) entre 1 e %d:\n", lin);
+
         scanf("%d,%d", &coordX, &coordY);
-        modifyMat(mat, lin, col, (coordX-1), (coordY-1));
-        minesProx(mines, lin, col, (coordX-1), (coordY-1));
+
+        qntdMines = minesProx(mines, lin, col, (coordX-1), (coordY-1));
+        modifyMat(mat, lin, col, (coordX-1), (coordY-1), qntdMines);
     }
 
     free(mat);
