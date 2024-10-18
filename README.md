@@ -1,1 +1,2 @@
-# This is part of a execise made By me named Campo Minado
+# This is part of an execise that I made named Campo Minado
+#Please give a check :)
