@@ -19,6 +19,14 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
            // printf("deu certo facil%d\n", *plays);
             break;
         }
+        else if((strcmp(level,"baby")) == 0){
+            *lin = 3;
+            *col = 3;
+            *nMines = 1;
+            *plays = (*lin * (*col)) - (*nMines+1);
+           // printf("deu certo facil%d\n", *plays);
+            break;
+        }
         else if((strcmp(level,"medio")) == 0){
             *lin = 20;
             *col = 20;
@@ -31,7 +39,7 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
             *lin = 30;
             *col = 30;
             *nMines = 9;
-            *plays = (*lin * (*col)) - (*nMines+1);
+            *plays = (*lin * (*col)) - (*nMines);
             printf("deu certo dificil%d\n", *plays);
             break;
         }
@@ -40,6 +48,7 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
         }
     }
 }
+
 //Creating a new matrix
 char** newMatrix(int nLin, int nCol){
     char **mat = calloc(nLin,sizeof(char*));
@@ -66,6 +75,7 @@ char** newMatrix(int nLin, int nCol){
     
     return mat;
 }
+
 //Creating a matrix that is initializated with the coordinate of the mines
 int* createMines(int nLin, int nCol, int nMines){
     int randNum, cont, line, column;
@@ -108,6 +118,7 @@ int* createMines(int nLin, int nCol, int nMines){
     putchar('\n');
     return mines;
 }
+
 //Modifies the matrix mat according wih the coordinates that were chosen by the player
 char** modifyMat(char** mat, int nLin, int nCol, int coordX, int coordY, int minesProx){
     //Converts the int minesProx to the correspondent char
@@ -122,6 +133,7 @@ char** modifyMat(char** mat, int nLin, int nCol, int coordX, int coordY, int min
     }
     return mat;
 } 
+
 //Priting the matrix
 void printMatrix(char** mat, int nLin, int nCol){
     
@@ -132,6 +144,7 @@ void printMatrix(char** mat, int nLin, int nCol){
         putchar('\n');
     }
 }
+
 //Calculates the number of mines within a distance of at least one 
 int minesProx(int* mines, int nLin, int nCol, int coordX, int coordY){
     int qntdMines;
@@ -142,13 +155,42 @@ int minesProx(int* mines, int nLin, int nCol, int coordX, int coordY){
             int dist = 0;
 
             dist = sqrt(pow((i-coordX), 2) + pow((j-coordY),2));
-            if((mines[i*nCol+j] == -1)&&(dist <= 1)){
+            if((mines[i*nCol+j] == -1)&&(dist == 1)){
                 qntdMines++;
-            } 
+            }
         }
     }
-    //printf("MINES PROX: %d\n", qntdMines);
+
+    //Returns the number of mines near the coordinate chosen by the player
     return qntdMines;
+}
+
+//Modify the template according to the number of nearby mines
+int* finalTemplate(int *mines, int nLin, int nCol, int nMines){
+    int qntdMines;
+    qntdMines = 0;
+
+    //Matrix that stores the coordinates of the mines
+    //int coordMines[nMines*2];
+    
+    for(int i = 0; i < nLin; i++){
+        for(int j = 0; j < nCol; j++){
+
+           //If we find the mine... we add plus 1 to the value of the near positions
+            if(mines[i*nCol+j] == -1){
+                for(int x = i-1; x <= i+1; x++){
+
+                    for(int y = j-1; y <= j+1; y++){
+                        if(mines[x*nCol+y]!= -1){
+                            if((x<nLin)&&(y<nCol)&&(x>=0)&&(y>=0)){
+                                mines[x*nCol+y]++;
+                            }
+                        }
+                    }
+                }
+            } 
+        }
+    } 
 }
 void printTemplate(int *mines, int nLin, int nCol){
     for(int i = 0; i < nLin; i++){
@@ -160,6 +202,7 @@ void printTemplate(int *mines, int nLin, int nCol){
     putchar('\n');
     putchar('\n');
 } 
+
 //If the player hits a mine, it prints game over. But if the number of moves runs out and he hasn't hit a mine, he wins.
 int gameOver(int* mines, int plays, int coordX, int coordY, int nCol){
     if(mines[coordX*nCol+coordY] == -1){
@@ -167,8 +210,9 @@ int gameOver(int* mines, int plays, int coordX, int coordY, int nCol){
     }
     return 0;
 } 
+
 int main() {
-    int lin, col, coordX, coordY, plays, nMines, cont;
+    int lin, col, coordX, coordY, plays, nMines;
 
 //Choosing the game level
     printf("Escolha um nivel(facil, medio ou dificil):\n");
@@ -181,13 +225,14 @@ int main() {
     int* mines = createMines(lin,col,nMines);
 
 //
-    while(cont < plays){
+    while(plays >= 0){
         int qntdMines = 0;
 
        //Printing the matrix
         printMatrix(mat, lin, col);
         printf("Digite uma coordenada(x,y) entre 1 e %d:\n", lin);
 
+        //Read the coordinates chosen by the player
         scanf("%d,%d", &coordX, &coordY);
 
         //Subtract minus 1 from the value of the coordinates
@@ -200,14 +245,26 @@ int main() {
 
         //If the funcion game over return 1, the player lost, and the loop stops 
         int gameStatus = gameOver(mines, plays, coordX, coordY,col);
+
+        printf("jogadas %d\n", plays);
         if(gameStatus){
-            printf("game over =(\n");
+            printf("game over :(\n");
 
             //Print the matrix template
+            finalTemplate(mines,lin,col,nMines);
+            //finalTemplate2(mines,lin,col,nMines);
             printTemplate(mines,lin,col);
             break;
         }
-        cont++;
+        else if((plays == 0)){
+            printf("parabéns, vc eh fera :)\n");
+            //Print the matrix template
+            finalTemplate(mines,lin,col,nMines);
+            //finalTemplate2(mines,lin,col,nMines);
+            printTemplate(mines,lin,col);
+        }
+        
+        plays--;
     }
 
     free(mat);
