@@ -19,14 +19,6 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
            // printf("deu certo facil%d\n", *plays);
             break;
         }
-        else if((strcmp(level,"baby")) == 0){
-            *lin = 3;
-            *col = 3;
-            *nMines = 1;
-            *plays = (*lin * (*col)) - (*nMines+1);
-           // printf("deu certo facil%d\n", *plays);
-            break;
-        }
         else if((strcmp(level,"medio")) == 0){
             *lin = 20;
             *col = 20;
@@ -71,8 +63,6 @@ char** newMatrix(int nLin, int nCol){
             mat[line][column] = 'x';
         }
     }
-
-    
     return mat;
 }
 
@@ -107,15 +97,14 @@ int* createMines(int nLin, int nCol, int nMines){
         }
     }
 
-    
-    for(int i = 0; i < nLin; i++){
-        for(int j = 0; j < nCol; j++){
-            printf("%d ",mines[i*nCol+j]);  
-        }
-        putchar('\n');
-    }
-    putchar('\n');
-    putchar('\n');
+    // for(int i = 0; i < nLin; i++){
+    //     for(int j = 0; j < nCol; j++){
+    //         printf("%d ",mines[i*nCol+j]);  
+    //     }
+    //     putchar('\n');
+    // }
+    // putchar('\n');
+    // putchar('\n');
     return mines;
 }
 
@@ -214,8 +203,13 @@ int gameOver(int* mines, int plays, int coordX, int coordY, int nCol){
 int main() {
     int lin, col, coordX, coordY, plays, nMines;
 
+//Start of the game
+printf("\n\n---------------- WELCOME to the minefield game!! ----------------\n\n");
 //Choosing the game level
-    printf("Escolha um nivel(facil, medio ou dificil):\n");
+    printf("Choose the level game:\n\n");
+    printf("-Digite \"facil\" para o nível fácil;\n");
+    printf("-Digite \"medio\" para o nível médio;\n");
+    printf("-Digite \"dificil\" para o nível difícil;\n\n");
     gameLevel(&lin, &col, &plays, &nMines);
    
 //We call the funcion "newMatrix" to create and initializate the matrix mat
@@ -228,9 +222,24 @@ int main() {
     while(plays >= 0){
         int qntdMines = 0;
 
+        putchar('\n');
+        for(int k = 0; k < 65; k++){
+            putchar('-');
+        }
+        putchar('\n');
+        putchar('\n');
+
        //Printing the matrix
         printMatrix(mat, lin, col);
-        printf("Digite uma coordenada(x,y) entre 1 e %d:\n", lin);
+
+        putchar('\n');
+        for(int k = 0; k < 65; k++){
+            putchar('-');
+        }
+        putchar('\n');
+        
+        printf("Digite uma coordenada no formato (x,y) que esteja entre 1 e %d:\n", lin);
+        
 
         //Read the coordinates chosen by the player
         scanf("%d,%d", &coordX, &coordY);
@@ -246,9 +255,8 @@ int main() {
         //If the funcion game over return 1, the player lost, and the loop stops 
         int gameStatus = gameOver(mines, plays, coordX, coordY,col);
 
-        printf("jogadas %d\n", plays);
         if(gameStatus){
-            printf("game over :(\n");
+            printf("\ngame over :(\n");
 
             //Print the matrix template
             finalTemplate(mines,lin,col,nMines);
@@ -260,7 +268,6 @@ int main() {
             printf("parabéns, vc eh fera :)\n");
             //Print the matrix template
             finalTemplate(mines,lin,col,nMines);
-            //finalTemplate2(mines,lin,col,nMines);
             printTemplate(mines,lin,col);
         }
         
