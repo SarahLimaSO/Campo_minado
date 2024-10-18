@@ -97,14 +97,6 @@ int* createMines(int nLin, int nCol, int nMines){
         }
     }
 
-    // for(int i = 0; i < nLin; i++){
-    //     for(int j = 0; j < nCol; j++){
-    //         printf("%d ",mines[i*nCol+j]);  
-    //     }
-    //     putchar('\n');
-    // }
-    // putchar('\n');
-    // putchar('\n');
     return mines;
 }
 
