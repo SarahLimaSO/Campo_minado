@@ -204,9 +204,9 @@ int main() {
     int lin, col, coordX, coordY, plays, nMines;
 
 //Start of the game
-printf("\n\n---------------- WELCOME to the minefield game!! ----------------\n\n");
+printf("\n\n---------------- Bem-vind@ ao minefield game!! ----------------\n\n");
 //Choosing the game level
-    printf("Choose the level game:\n\n");
+    printf("Escolha o nível do jogo:\n\n");
     printf("-Digite \"facil\" para o nível fácil;\n");
     printf("-Digite \"medio\" para o nível médio;\n");
     printf("-Digite \"dificil\" para o nível difícil;\n\n");
