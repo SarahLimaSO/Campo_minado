@@ -4,7 +4,7 @@
 #include <time.h>
 #include <math.h>
 
-//Escolhe nivel do jogo
+//Choose the game level
 void gameLevel(int *lin, int *col, int *plays, int *nMines ){
     char level[8];
 
@@ -16,7 +16,6 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
             *col = 10;
             *nMines = 3;
             *plays = (*lin * (*col)) - (*nMines+1);
-           // printf("deu certo facil%d\n", *plays);
             break;
         }
         else if((strcmp(level,"medio")) == 0){
@@ -24,7 +23,6 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
             *col = 20;
             *nMines = 6;
             *plays = (*lin * (*col)) - (*nMines+1);
-            printf("deu certo medio%d\n", *plays);
             break;
         }
         else if((strcmp(level,"dificil")) == 0){
@@ -32,7 +30,6 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
             *col = 30;
             *nMines = 9;
             *plays = (*lin * (*col)) - (*nMines);
-            printf("deu certo dificil%d\n", *plays);
             break;
         }
         else{
@@ -70,8 +67,15 @@ char** newMatrix(int nLin, int nCol){
 int* createMines(int nLin, int nCol, int nMines){
     int randNum, cont, line, column;
     int coord[2];
-    int *mines = calloc(nLin*nCol,sizeof(int));
     cont = 0;
+
+    int *mines = calloc(nLin*nCol,sizeof(int));
+
+    if(mines == NULL){
+        printf("ERROR03! Insufficient memory!");
+        exit(1);
+    }
+    
     
     //Inicializating the seed with time
     srand(time(NULL));
@@ -83,7 +87,6 @@ int* createMines(int nLin, int nCol, int nMines){
         //The valor of "coord" will be a number beetween 0 and the number of lines(because the number of lines is equal to the number of columns)
         for(int indV = 0; indV < 2; indV++){ 
             randNum = rand() %((nLin - 1));
-            // printf("%d\n", randNum);
             coord[indV] = randNum;
         }
         line = coord[0];
@@ -102,6 +105,7 @@ int* createMines(int nLin, int nCol, int nMines){
 
 //Modifies the matrix mat according wih the coordinates that were chosen by the player
 char** modifyMat(char** mat, int nLin, int nCol, int coordX, int coordY, int minesProx){
+
     //Converts the int minesProx to the correspondent char
     char converted = '0' + minesProx;
 
@@ -152,7 +156,6 @@ int* finalTemplate(int *mines, int nLin, int nCol, int nMines){
     qntdMines = 0;
 
     //Matrix that stores the coordinates of the mines
-    //int coordMines[nMines*2];
     
     for(int i = 0; i < nLin; i++){
         for(int j = 0; j < nCol; j++){
@@ -193,10 +196,14 @@ int gameOver(int* mines, int plays, int coordX, int coordY, int nCol){
 } 
 
 int main() {
-    int lin, col, coordX, coordY, plays, nMines;
+    int lin, col, coordX, coordY, plays, nMines, valid, anteriorX, anteriorY;
+
+    //Check if the coordinates chosen by the player are valid
+    valid = 1;
 
 //Start of the game
 printf("\n\n---------------- Bem-vind@ ao minefield game!! ----------------\n\n");
+
 //Choosing the game level
     printf("Escolha o nível do jogo:\n\n");
     printf("-Digite \"facil\" para o nível fácil;\n");
@@ -229,16 +236,32 @@ printf("\n\n---------------- Bem-vind@ ao minefield game!! ----------------\n\n"
             putchar('-');
         }
         putchar('\n');
+
         
-        printf("Digite uma coordenada no formato (x,y) que esteja entre 1 e %d:\n", lin);
-        
+        //Handling with an exception
+        if(valid){
+            printf("Digite uma coordenada no formato (x,y) que esteja entre 1 e %d:\n", lin);
+        }
+        else{
+            printf("Por favor, digite novamente uma coordenada (x,y)  de modo que esteja dentro do intervalo de 1 a %d!!\n", lin);
+        }
 
         //Read the coordinates chosen by the player
         scanf("%d,%d", &coordX, &coordY);
 
-        //Subtract minus 1 from the value of the coordinates
+        //Handling with an exception
+        if((coordX > lin)||(coordX < 1)||(coordY > col)||(coordY < 1)){
+            valid = 0;
+            plays++;
+        }
+        else{
+            valid = 1;
+        }
+
+        //Subtracts minus 1 from the value of the coordinates
         coordX -= 1;
         coordY -= 1;
+
         qntdMines = minesProx(mines, lin, col, coordX, coordY);
 
         //Modifies the matrix mat according wih the coordinates that were chosen by the player
@@ -252,17 +275,18 @@ printf("\n\n---------------- Bem-vind@ ao minefield game!! ----------------\n\n"
 
             //Print the matrix template
             finalTemplate(mines,lin,col,nMines);
-            //finalTemplate2(mines,lin,col,nMines);
             printTemplate(mines,lin,col);
             break;
         }
         else if((plays == 0)){
             printf("parabéns, vc eh fera :)\n");
+
             //Print the matrix template
             finalTemplate(mines,lin,col,nMines);
             printTemplate(mines,lin,col);
         }
-        
+        anteriorX = coordX;
+        anteriorY = coordY;
         plays--;
     }
 
