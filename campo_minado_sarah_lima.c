@@ -163,7 +163,6 @@ int* finalTemplate(int *mines, int nLin, int nCol, int nMines){
            //If we find the mine... we add plus 1 to the value of the near positions
             if(mines[i*nCol+j] == -1){
                 for(int x = i-1; x <= i+1; x++){
-
                     for(int y = j-1; y <= j+1; y++){
                         if(mines[x*nCol+y]!= -1){
                             if((x<nLin)&&(y<nCol)&&(x>=0)&&(y>=0)){
