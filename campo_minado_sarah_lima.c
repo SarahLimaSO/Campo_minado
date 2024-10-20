@@ -35,7 +35,7 @@ void gameLevel(int *lin, int *col, int *plays, int *nMines ){
                 *col = 30;
                 *nMines = 9;
                 *plays = (*lin * (*col)) - (*nMines);
-                invalid = 1;
+                invalid = 0;
 
                 break;
             
